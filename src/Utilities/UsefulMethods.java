@@ -188,11 +188,15 @@ WebDriver driver;
 		DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
 		Date today = Calendar.getInstance().getTime();        
 		String reportDate = df.format(today);
-		String reportPath = workspacePath+"src\\Reports\\"+reportDate.replace("/","-")+"\\";
+		String reportPath = workspacePath+"Reports\\"+reportDate.replace("/","-")+"\\";
 		File dateDir = new File(reportPath);
+		
 		if (!dateDir.exists()){
 				dateDir.mkdir();	
 		}
+		
+		String tmpPath = dateDir.getAbsolutePath();
+		String homePath = tmpPath.substring(0,tmpPath.indexOf("src"));
 				
 		String idText = this.GetDateId();
 		String executionPath = reportPath+idText+"\\";
@@ -204,8 +208,8 @@ WebDriver driver;
     		File errorDir = new File(errorPath);
     		errorDir.mkdir();
     		
-//            Rectangle screenRect = new Rectangle(Toolkit.getDefaultToolkit().getScreenSize());
-//            BufferedImage capture = new Robot().createScreenCapture(screenRect);
+            Rectangle screenRect = new Rectangle(Toolkit.getDefaultToolkit().getScreenSize());
+            BufferedImage capture = new Robot().createScreenCapture(screenRect);
 //            
 //            ImageIO.write(capture, "png", new File(errorPath+"ErrorImage-"+idText+".png"));
     		   		
@@ -217,7 +221,7 @@ WebDriver driver;
             driver.close();
         }
         
-        File srcDir = new File(workspacePath+"\\test-output\\");
+        File srcDir = new File(homePath+"\\test-output\\");
         
         for (File srcFile: srcDir.listFiles()) {
             if (!srcFile.isDirectory()) {
