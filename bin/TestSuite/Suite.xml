@@ -1,0 +1,74 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+ 
+<suite name="SIR Regresion Automatizada">
+
+<!--
+<test name="Generar Boleta">
+	<classes>				
+		<class name="TestCases.TC001_BUI_GenerarBoleta">
+			<methods>
+				<include name="ReadConfigFile"/>
+				<include name="OpenBrowser"/>
+				<include name="ReadDataTest"/>
+				<include name="LoginBUI"/>				
+				<include name="IrAAtributosDeItem"/>
+				<include name="IrACrearBoleta"/>	
+				<include name="IngresarDatosDelContribuyente"/>		
+				<include name="AgregarConcepto"/>
+				<include name="GenerarBoleta"/>
+				<include name="VerificarBase"/>
+				<include name="IrAReportesPorNumero"/>
+				<include name="IngresarBoletaPorNumero"/>
+				<include name="IrAReportesPorListado"/>
+				<include name="IngresarBoletaPorListado"/>
+				<exclude name="PagarBoleta"/>				
+				<include name="LogoutBUI"/>
+			</methods>	
+		</class>										
+	</classes>
+</test> 
+-->
+
+<!--
+
+ <test name="Generar Tramite">
+	<classes>
+		<class name="TestCases.TC002_BUI_GenerarTramite">
+			<methods>
+				<include name="ReadConfigFile"/>
+				<include name="OpenBrowser"/>
+				<include name="ReadDataTest"/>
+				<include name="LoginABMTram"/>				
+				<include name="IrACrearTramite"/>
+				<include name="GuardarTramite"/>
+				<include name="VerificarBase"/>
+				<include name="VerificarTramite"/>
+				<include name="LogoutABMTram"/>
+			</methods>	
+		</class>		
+	</classes>
+</test>
+
+-->	
+
+ <test name="Generar Tramite Pago Electronico">
+	<classes>
+		<class name="TestCases.TC003_PE_GenerarTramite">
+			<methods>
+				<include name="ReadConfigFile"/>
+				<include name="OpenBrowser"/>
+				<include name="ReadDataTest"/>
+				<include name="LoginABMPE"/>				
+				<include name="IrACrearTramite"/>				
+				<include name="GuardarTramite"/>
+				<include name="VerificarBase"/>
+				<include name="AsociarCliente"/>
+				<include name="LogoutABMPE"/>
+				<include name="LoginABMTram"/>
+				<include name="BuscarTramite"/>				
+			</methods>	
+		</class>		
+	</classes>
+</test>
+
+</suite>
