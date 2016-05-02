@@ -61,4 +61,24 @@ public class ReadPropertyFile {
 		return prop.getProperty("workplaceHomePath");
 	}
 	
+	public String getUrlPagoBUI(){
+		return prop.getProperty("urlPagoBUI");
+	}
+
+	public String getTitularVisa(){
+		return prop.getProperty("titularVisa");
+	}
+	
+	public String getNumVisa(){
+		return prop.getProperty("tarjetaVisa");
+	}
+
+	public String getVencVisa(){
+		return prop.getProperty("vencVisa");
+	}
+	
+	public String getCodSeguridadVisa(){
+		return prop.getProperty("codSeguridadVisa");
+	}
+	
 }

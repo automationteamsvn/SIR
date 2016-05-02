@@ -16,6 +16,7 @@ import org.testng.annotations.Test;
 import PageObjects.BUIHomePage;
 import PageObjects.LoginBUI;
 import PageObjects.PortalDeTramitesHomePage;
+import PageObjects.Tarjeta;
 import Utilities.DataBaseQuery;
 import Utilities.ReadPropertyFile;
 import Utilities.UsefulMethods;
@@ -39,12 +40,17 @@ public class TC001_BUI_GenerarBoleta {
 	private String dataTestPath;	
 	private String workspacePath;
 	private String boletaId;
+	private String urlPagoBUIToken;
 	private JSONObject dataTest;
 	private String documento;
 	private String ayn;
 	private String email;
 	private DataBaseQuery queryClass;
 	private String dependencia;
+	private String titularVisa;
+	private String numVisa;
+	private String vencVisa;
+	private String codSeguridadVisa;
 	
 	@Test
 	public void ReadConfigFile() throws Exception{
@@ -57,6 +63,11 @@ public class TC001_BUI_GenerarBoleta {
 		browser = data.getBrowser();	
 		dataTestPath = data.getDataTestPath();
 		workspacePath = data.getWorkspacePath();
+		urlPagoBUIToken = data.getUrlPagoBUI();
+		titularVisa = data.getTitularVisa();
+		numVisa = data.getNumVisa();
+		vencVisa = data.getVencVisa();
+		codSeguridadVisa = data.getCodSeguridadVisa();		
 	}	
 
 	@Test (dependsOnMethods={"ReadConfigFile"})
@@ -164,7 +175,7 @@ public class TC001_BUI_GenerarBoleta {
 		buiHomePage.SelectCodigo(cod);
 		
 		buiHomePage.ClickOnAgregar();
-		Thread.sleep(1000);
+		Thread.sleep(4000);
 		
 		Assert.assertTrue(usefulM.CheckpointById(false,BUIHomePage.txtCodigoId, 5),"No se pudo agregar Concepto en 'Crear Boleta'.");
 	}	
@@ -297,9 +308,17 @@ public class TC001_BUI_GenerarBoleta {
 		Assert.assertTrue(usefulM.CheckpointById(true,PortalDeTramitesHomePage.btnContinuarId, 10),"No se muestra la Boleta Id a pagar.");
 		
 		portalTraHomePage.ClickOnContinuar();
+		Thread.sleep(3000);
+		
+		//Assert.assertTrue(usefulM.CheckpointById(true,PortalDeTramitesHomePage.radMedioPagoId, 30),"No se muestra el Medio de Pago.");
+		
+		String token = usefulM.GetToken();
+		System.out.println(token);	
+		
+		driver.navigate().to(urlPagoBUIToken+token);
 		Thread.sleep(1000);
 		
-		Assert.assertTrue(usefulM.CheckpointById(true,PortalDeTramitesHomePage.radMedioPagoId, 30),"No se muestra el Medio de Pago.");
+		Assert.assertTrue(usefulM.CheckpointById(true,PortalDeTramitesHomePage.radMedioPagoId, 10),"No se muestra el Medio de Pago despues de cambiar la Url de pago + token.");
 		
 		portalTraHomePage.ClickOnMedioPago();
 		Thread.sleep(1000);
@@ -316,6 +335,26 @@ public class TC001_BUI_GenerarBoleta {
 		Thread.sleep(1000);
 		
 		//Assert.assertTrue(usefulM.CheckpointByCSS(true,PortalDeTramitesHomePage.cboCuotasCSS,"select",10),"No se muestra las cuotas.");
+		
+		Tarjeta tarjeta = new Tarjeta(driver);
+		
+		tarjeta.IngresarTitular(titularVisa);
+		Thread.sleep(1000);
+		
+		tarjeta.IngresarNumTarjeta(numVisa);
+		Thread.sleep(1000);
+		
+		tarjeta.IngresarVencVisa(vencVisa);
+		Thread.sleep(1000);
+
+		tarjeta.IngresarCodSeguridadVisa(codSeguridadVisa);
+		Thread.sleep(1000);
+
+		tarjeta.IngresarEmail(email);
+		Thread.sleep(1000);
+
+		tarjeta.ClickOnAceptar();
+		Thread.sleep(1000);
 	}	
 	
 	@Test (dependsOnMethods={"PagarBoleta"})

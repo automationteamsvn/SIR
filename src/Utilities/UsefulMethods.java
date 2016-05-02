@@ -209,9 +209,8 @@ WebDriver driver;
     		errorDir.mkdir();
     		
             Rectangle screenRect = new Rectangle(Toolkit.getDefaultToolkit().getScreenSize());
-            BufferedImage capture = new Robot().createScreenCapture(screenRect);
-//            
-//            ImageIO.write(capture, "png", new File(errorPath+"ErrorImage-"+idText+".png"));
+            BufferedImage capture = new Robot().createScreenCapture(screenRect);           
+            ImageIO.write(capture, "png", new File(errorPath+"ErrorImage-"+idText+".png"));
     		   		
 //    		File scrFile = ((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE);
 //
@@ -236,16 +235,7 @@ WebDriver driver;
 		String url = driver.getCurrentUrl();
 		int beginPos = url.indexOf("=");
 		int lastPos = url.indexOf("&");
-		token = url.substring(beginPos,lastPos);
-//				split("-");
-//        for(String parts:split){
-//        	if(text.contentEquals("")){
-//        		text = Integer.toString(Integer.parseInt(parts));	
-//        	}else{
-//        		text = text + "." + Integer.toString(Integer.parseInt(parts));	
-//        	}        		
-//        	
-//        }		    	
+		token = url.substring(beginPos + 1,lastPos);		    	
 		return token;
 	}
 	
