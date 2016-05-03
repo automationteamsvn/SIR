@@ -48,9 +48,12 @@ public class TC001_BUI_GenerarBoleta {
 	private DataBaseQuery queryClass;
 	private String dependencia;
 	private String titularVisa;
-	private String numVisa;
+	private String tarjetaVisa;
 	private String vencVisa;
 	private String codSeguridadVisa;
+	private String calleVisa;
+	private String numeroDirecVisa;
+	private String fechaNacVisa;
 	
 	@Test
 	public void ReadConfigFile() throws Exception{
@@ -65,9 +68,12 @@ public class TC001_BUI_GenerarBoleta {
 		workspacePath = data.getWorkspacePath();
 		urlPagoBUIToken = data.getUrlPagoBUI();
 		titularVisa = data.getTitularVisa();
-		numVisa = data.getNumVisa();
+		tarjetaVisa = data.getTarjetaVisa();
 		vencVisa = data.getVencVisa();
 		codSeguridadVisa = data.getCodSeguridadVisa();		
+		calleVisa = data.getDireccion();
+		numeroDirecVisa = data.getNumeroDirec();
+		fechaNacVisa = data.getFechaNac();
 	}	
 
 	@Test (dependsOnMethods={"ReadConfigFile"})
@@ -308,12 +314,11 @@ public class TC001_BUI_GenerarBoleta {
 		Assert.assertTrue(usefulM.CheckpointById(true,PortalDeTramitesHomePage.btnContinuarId, 10),"No se muestra la Boleta Id a pagar.");
 		
 		portalTraHomePage.ClickOnContinuar();
-		Thread.sleep(3000);
+		Thread.sleep(5000);
 		
-		//Assert.assertTrue(usefulM.CheckpointById(true,PortalDeTramitesHomePage.radMedioPagoId, 30),"No se muestra el Medio de Pago.");
+		Assert.assertTrue(usefulM.CheckpointById(true,PortalDeTramitesHomePage.radMedioPagoId, 45),"No se muestra el Medio de Pago.");
 		
 		String token = usefulM.GetToken();
-		System.out.println(token);	
 		
 		driver.navigate().to(urlPagoBUIToken+token);
 		Thread.sleep(1000);
@@ -334,27 +339,39 @@ public class TC001_BUI_GenerarBoleta {
 		portalTraHomePage.ClickOnPago();
 		Thread.sleep(1000);
 		
-		//Assert.assertTrue(usefulM.CheckpointByCSS(true,PortalDeTramitesHomePage.cboCuotasCSS,"select",10),"No se muestra las cuotas.");
+		Assert.assertTrue(usefulM.CheckpointByCSS(false,PortalDeTramitesHomePage.cboCuotasCSS,"select",10),"Aun se muestra la pantalla de forma de pago.");
 		
 		Tarjeta tarjeta = new Tarjeta(driver);
 		
 		tarjeta.IngresarTitular(titularVisa);
-		Thread.sleep(1000);
+		Thread.sleep(500);
 		
-		tarjeta.IngresarNumTarjeta(numVisa);
-		Thread.sleep(1000);
+		tarjeta.IngresarNumTarjeta(tarjetaVisa);
+		Thread.sleep(500);
 		
 		tarjeta.IngresarVencVisa(vencVisa);
-		Thread.sleep(1000);
+		Thread.sleep(500);
 
 		tarjeta.IngresarCodSeguridadVisa(codSeguridadVisa);
-		Thread.sleep(1000);
+		Thread.sleep(500);
 
 		tarjeta.IngresarEmail(email);
-		Thread.sleep(1000);
+		Thread.sleep(500);
 
+		tarjeta.IngresarDocumento("22333444");
+		Thread.sleep(500);
+
+		tarjeta.IngresarCalle(calleVisa);
+		Thread.sleep(500);
+
+		tarjeta.IngresarNumero(numeroDirecVisa);
+		Thread.sleep(500);
+		
+		tarjeta.IngresarFechaNac(fechaNacVisa);
+		Thread.sleep(500);
+		
 		tarjeta.ClickOnAceptar();
-		Thread.sleep(1000);
+		Thread.sleep(500);
 	}	
 	
 	@Test (dependsOnMethods={"PagarBoleta"})

@@ -69,7 +69,7 @@ public class ReadPropertyFile {
 		return prop.getProperty("titularVisa");
 	}
 	
-	public String getNumVisa(){
+	public String getTarjetaVisa(){
 		return prop.getProperty("tarjetaVisa");
 	}
 
@@ -81,4 +81,18 @@ public class ReadPropertyFile {
 		return prop.getProperty("codSeguridadVisa");
 	}
 	
+	public String getDireccion(){
+		return prop.getProperty("direccion");
+	}
+	
+	public String getNumeroDirec(){
+		return prop.getProperty("numero");
+	}
+	
+	public String getFechaNac(){
+		return prop.getProperty("nacimiento");
+	}
+	
+	
+
 }

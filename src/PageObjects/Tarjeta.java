@@ -62,6 +62,42 @@ public class Tarjeta {
 		}		
 	}	
 	
+	public void IngresarDocumento (String documento) {		
+		for(int x=0;x<txtBox.size();x++){
+			if(txtBox.get(x).getAttribute("name").contentEquals("NRODOC")){
+				txtBox.get(x).sendKeys(documento);
+				break;
+			}
+		}		
+	}	
+
+	public void IngresarCalle (String calle) {		
+		for(int x=0;x<txtBox.size();x++){
+			if(txtBox.get(x).getAttribute("name").contentEquals("CALLE")){
+				txtBox.get(x).sendKeys(calle);
+				break;
+			}
+		}		
+	}
+	
+	public void IngresarNumero (String numero) {		
+		for(int x=0;x<txtBox.size();x++){
+			if(txtBox.get(x).getAttribute("name").contentEquals("NROPUERTA")){
+				txtBox.get(x).sendKeys(numero);
+				break;
+			}
+		}		
+	}	
+		
+	public void IngresarFechaNac (String fecha) {		
+		for(int x=0;x<txtBox.size();x++){
+			if(txtBox.get(x).getAttribute("name").contentEquals("FECHANACIMIENTO")){
+				txtBox.get(x).sendKeys(fecha);
+				break;
+			}
+		}		
+	}
+	
 	public void ClickOnAceptar () {		
 		for(int x=0;x<txtBox.size();x++){
 			if(txtBox.get(x).getAttribute("value").contentEquals("Aceptar")){
