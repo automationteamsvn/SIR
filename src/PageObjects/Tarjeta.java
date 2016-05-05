@@ -17,6 +17,13 @@ public class Tarjeta {
 	@FindBy(how = How.TAG_NAME, using = "input")
 	private List<WebElement> txtBox;
 	
+	public static final String textMessageCSS = ".texto>strong";
+	@FindBy(css = textMessageCSS)
+	private WebElement txtMessage;
+	
+	@FindBy(css = ".texto")
+	private List<WebElement> txtData;
+	
 	public void IngresarTitular (String titular) {		
 		for(int x=0;x<txtBox.size();x++){
 			if(txtBox.get(x).getAttribute("name").contentEquals("NOMBREENTARJETA")){
@@ -106,5 +113,31 @@ public class Tarjeta {
 			}
 		}		
 	}
+
+	public boolean CheckMessage () {
+		boolean flag = false;
+		if(txtMessage.getText().contains("La transacción ha sido APROBADA.")){
+			flag = true;
+		}
+		return flag;
+	}
+	
+	public String GetOperacionId () {
+		int y = 0;
+		String text = "";
+		for(int x=0;x<txtData.size();x++){
+			if(txtData.get(x).getText().contains("Código de Operación:")){
+				y = x+1;
+				break;
+			}
+		}
 		
+		for(int x=0;x<txtData.size();x++){
+			if(x==y){
+				text = txtData.get(x).getText();
+				break;
+			}
+		}
+		return text;
+	}
 }

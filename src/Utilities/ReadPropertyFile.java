@@ -81,18 +81,20 @@ public class ReadPropertyFile {
 		return prop.getProperty("codSeguridadVisa");
 	}
 	
+	public String getDocumento(){
+		return prop.getProperty("documentoVisa");
+	}
+	
 	public String getDireccion(){
-		return prop.getProperty("direccion");
+		return prop.getProperty("direccionVisa");
 	}
 	
 	public String getNumeroDirec(){
-		return prop.getProperty("numero");
+		return prop.getProperty("numeroVisa");
 	}
 	
 	public String getFechaNac(){
-		return prop.getProperty("nacimiento");
-	}
-	
-	
+		return prop.getProperty("nacimientoVisa");
+	}	
 
 }

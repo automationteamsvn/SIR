@@ -1,10 +1,6 @@
 package Utilities;
 
 import java.awt.AWTException;
-import java.awt.Graphics2D;
-import java.awt.GraphicsConfiguration;
-import java.awt.GraphicsDevice;
-import java.awt.MouseInfo;
 import java.awt.Rectangle;
 import java.awt.Robot;
 import java.awt.Toolkit;
@@ -17,9 +13,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-
 import javax.imageio.ImageIO;
-
 import org.apache.commons.io.FileUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -27,7 +21,6 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
-import javax.swing.JWindow;
 
 public class UsefulMethods {
 
@@ -211,12 +204,7 @@ WebDriver driver;
             Rectangle screenRect = new Rectangle(Toolkit.getDefaultToolkit().getScreenSize());
             BufferedImage capture = new Robot().createScreenCapture(screenRect);           
             ImageIO.write(capture, "png", new File(errorPath+"ErrorImage-"+idText+".png"));
-    		   		
-//    		File scrFile = ((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE);
-//
-//    		FileUtils.copyFile(scrFile, new File("D:\\screenshot.jpg"));    		
-
-			
+ 		
             driver.close();
         }
         

@@ -51,6 +51,7 @@ public class TC001_BUI_GenerarBoleta {
 	private String tarjetaVisa;
 	private String vencVisa;
 	private String codSeguridadVisa;
+	private String documentoVisa;
 	private String calleVisa;
 	private String numeroDirecVisa;
 	private String fechaNacVisa;
@@ -70,7 +71,8 @@ public class TC001_BUI_GenerarBoleta {
 		titularVisa = data.getTitularVisa();
 		tarjetaVisa = data.getTarjetaVisa();
 		vencVisa = data.getVencVisa();
-		codSeguridadVisa = data.getCodSeguridadVisa();		
+		codSeguridadVisa = data.getCodSeguridadVisa();
+		documentoVisa = data.getDocumento();
 		calleVisa = data.getDireccion();
 		numeroDirecVisa = data.getNumeroDirec();
 		fechaNacVisa = data.getFechaNac();
@@ -358,7 +360,7 @@ public class TC001_BUI_GenerarBoleta {
 		tarjeta.IngresarEmail(email);
 		Thread.sleep(500);
 
-		tarjeta.IngresarDocumento("22333444");
+		tarjeta.IngresarDocumento(documentoVisa);
 		Thread.sleep(500);
 
 		tarjeta.IngresarCalle(calleVisa);
@@ -371,8 +373,26 @@ public class TC001_BUI_GenerarBoleta {
 		Thread.sleep(500);
 		
 		tarjeta.ClickOnAceptar();
-		Thread.sleep(500);
+		Thread.sleep(3000);
+		
+		Assert.assertTrue(usefulM.CheckpointByCSS(true,Tarjeta.textMessageCSS,"transacción",10),"La ventata del resultado de la transaccion con tarteja no se esta mostrando.");
+		
+		Assert.assertTrue(tarjeta.CheckMessage(),"La operacion de pago no fue exitosa. Verificar datos");
+				
+		System.out.println(tarjeta.GetOperacionId());
 	}	
+	
+	
+	@Test (dependsOnMethods={"PagarBoleta"})	
+	public void VerificarPagoEnBase() throws Exception{
+		
+		queryClass = new DataBaseQuery();
+		
+		Assert.assertTrue(queryClass.Count("PAGOELECTRONICO.COBRO where OBSERVACION like '"+ boletaId +"'")!=0,"No se genero el registro de pago en la Base de Datos. (PAGOELECTRONICO.COBRO)");
+		
+		String pagoID = queryClass.Select("PAGOELECTRONICO.COBRO where OBSERVACION like '"+ boletaId +"'","ID");
+	
+	}
 	
 	@Test (dependsOnMethods={"PagarBoleta"})
 	public void LogoutBUI(){
