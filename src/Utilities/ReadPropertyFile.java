@@ -27,7 +27,7 @@ public class ReadPropertyFile {
 	
 	public String getUrlABMPE(){
 		return prop.getProperty("urlAMBPE");
-	}
+	}	
 	
 	public String getBrowser(){
 		return prop.getProperty("browser");
@@ -97,4 +97,16 @@ public class ReadPropertyFile {
 		return prop.getProperty("nacimientoVisa");
 	}	
 
+	public String getUrlSIRTools(){
+		return prop.getProperty("urlSIRTools");
+	}
+	
+	public String getUserTools(){
+		return prop.getProperty("userTools");
+	}
+	
+	public String getPwdTools(){
+		return prop.getProperty("pwdTools");
+	}
+	
 }

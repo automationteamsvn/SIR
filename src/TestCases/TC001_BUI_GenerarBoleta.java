@@ -15,7 +15,9 @@ import org.testng.annotations.Test;
 
 import PageObjects.BUIHomePage;
 import PageObjects.LoginBUI;
+import PageObjects.LoginTools;
 import PageObjects.PortalDeTramitesHomePage;
+import PageObjects.PortalTools;
 import PageObjects.Tarjeta;
 import Utilities.DataBaseQuery;
 import Utilities.ReadPropertyFile;
@@ -55,6 +57,9 @@ public class TC001_BUI_GenerarBoleta {
 	private String calleVisa;
 	private String numeroDirecVisa;
 	private String fechaNacVisa;
+	private String urlSIRTools;
+	private String userTools;
+	private String pwdTools;
 	
 	@Test
 	public void ReadConfigFile() throws Exception{
@@ -76,6 +81,9 @@ public class TC001_BUI_GenerarBoleta {
 		calleVisa = data.getDireccion();
 		numeroDirecVisa = data.getNumeroDirec();
 		fechaNacVisa = data.getFechaNac();
+		urlSIRTools = data.getUrlSIRTools();
+		userTools = data.getUserTools();
+		pwdTools = data.getPwdTools();
 	}	
 
 	@Test (dependsOnMethods={"ReadConfigFile"})
@@ -194,7 +202,7 @@ public class TC001_BUI_GenerarBoleta {
 		buiHomePage.ClickOnGenerar();
 		Thread.sleep(5000);
 		
-		Assert.assertTrue(usefulM.CheckpointById(true,BUIHomePage.btnAceptarId, 30),"No se muestra la Boleta (PDF).");
+		Assert.assertTrue(usefulM.CheckpointById(true,BUIHomePage.btnAceptarId, 45),"No se muestra la Boleta (PDF).");
 		
 		boletaId = buiHomePage.ObtenerBoletaId();
 		Thread.sleep(1000);
@@ -318,14 +326,14 @@ public class TC001_BUI_GenerarBoleta {
 		portalTraHomePage.ClickOnContinuar();
 		Thread.sleep(5000);
 		
-		Assert.assertTrue(usefulM.CheckpointById(true,PortalDeTramitesHomePage.radMedioPagoId, 45),"No se muestra el Medio de Pago.");
+		Assert.assertTrue(usefulM.CheckpointById(true,PortalDeTramitesHomePage.radMedioPagoId, 60),"No se muestra el Medio de Pago.");
 		
 		String token = usefulM.GetToken();
 		
 		driver.navigate().to(urlPagoBUIToken+token);
 		Thread.sleep(1000);
 		
-		Assert.assertTrue(usefulM.CheckpointById(true,PortalDeTramitesHomePage.radMedioPagoId, 10),"No se muestra el Medio de Pago despues de cambiar la Url de pago + token.");
+		Assert.assertTrue(usefulM.CheckpointById(true,PortalDeTramitesHomePage.radMedioPagoId, 15),"No se muestra el Medio de Pago despues de cambiar la Url de pago + token.");
 		
 		portalTraHomePage.ClickOnMedioPago();
 		Thread.sleep(1000);
@@ -382,7 +390,6 @@ public class TC001_BUI_GenerarBoleta {
 		System.out.println(tarjeta.GetOperacionId());
 	}	
 	
-	
 	@Test (dependsOnMethods={"PagarBoleta"})	
 	public void VerificarPagoEnBase() throws Exception{
 		
@@ -390,11 +397,41 @@ public class TC001_BUI_GenerarBoleta {
 		
 		Assert.assertTrue(queryClass.Count("PAGOELECTRONICO.COBRO where OBSERVACION like '"+ boletaId +"'")!=0,"No se genero el registro de pago en la Base de Datos. (PAGOELECTRONICO.COBRO)");
 		
-		String pagoID = queryClass.Select("PAGOELECTRONICO.COBRO where OBSERVACION like '"+ boletaId +"'","ID");
+		//String pagoID = queryClass.Select("PAGOELECTRONICO.COBRO where OBSERVACION like '"+ boletaId +"'","ID");
 	
 	}
 	
-	@Test (dependsOnMethods={"PagarBoleta"})
+	@Test (dependsOnMethods={"VerificarPagoEnBase"})	
+	public void CierrePE() throws Exception{
+		
+		driver.navigate().to(urlSIRTools);
+		Thread.sleep(1000);
+		
+		Assert.assertTrue(usefulM.CheckpointById(true,LoginTools.txtPwdId, 15),"No se muestra el Login SIR Tools.");
+			
+		LoginTools loginTools = new LoginTools(driver);
+		
+		loginTools.LoginUser(userTools, pwdTools);
+		
+		Assert.assertTrue(usefulM.CheckpointById(false,LoginTools.txtPwdId, 30),"Fallo el Login SIR Tools.");
+		
+		PortalTools tools = new PortalTools(driver);
+		
+		tools.ClickOnMenu("Ejecutador");
+		
+		tools.ClickOnAmbiente("Test");
+		
+		tools.ClickOnAmbiente("BUI Sync");
+		
+		//queryClass = new DataBaseQuery();
+		
+		//Assert.assertTrue(queryClass.Count("PAGOELECTRONICO.COBRO where OBSERVACION like '"+ boletaId +"'")!=0,"No se genero el registro de pago en la Base de Datos. (PAGOELECTRONICO.COBRO)");
+		
+		//String pagoID = queryClass.Select("PAGOELECTRONICO.COBRO where OBSERVACION like '"+ boletaId +"'","ID");
+	
+	}
+	
+	@Test (dependsOnMethods={"VerificarPagoEnBase"})
 	public void LogoutBUI(){
 		
 //		buiHomePage.Logout();
