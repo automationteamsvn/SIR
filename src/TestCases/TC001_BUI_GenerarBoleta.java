@@ -193,7 +193,7 @@ public class TC001_BUI_GenerarBoleta {
 		buiHomePage.ClickOnAgregar();
 		Thread.sleep(4000);
 		
-		Assert.assertTrue(usefulM.CheckpointById(false,BUIHomePage.txtCodigoId, 5),"No se pudo agregar Concepto en 'Crear Boleta'.");
+		Assert.assertTrue(usefulM.CheckpointById(false,BUIHomePage.txtCodigoId, 10),"No se pudo agregar Concepto en 'Crear Boleta'.");
 	}	
 
 	@Test (dependsOnMethods={"AgregarConcepto"})
@@ -294,7 +294,7 @@ public class TC001_BUI_GenerarBoleta {
 		buiHomePage.IngresarDocumentoReport(documento);
 		
 		buiHomePage.ClickOnBuscar();
-		Thread.sleep(3000);
+		Thread.sleep(5000);
 		
 		Assert.assertTrue(buiHomePage.CheckGrid(boletaId),"La boleta '"+ boletaId +"' no se encontro en la grilla de la busqueda por 'Listado'.");
 	}
@@ -387,7 +387,6 @@ public class TC001_BUI_GenerarBoleta {
 		
 		Assert.assertTrue(tarjeta.CheckMessage(),"La operacion de pago no fue exitosa. Verificar datos");
 				
-		System.out.println(tarjeta.GetOperacionId());
 	}	
 	
 	@Test (dependsOnMethods={"PagarBoleta"})	
@@ -418,10 +417,29 @@ public class TC001_BUI_GenerarBoleta {
 		PortalTools tools = new PortalTools(driver);
 		
 		tools.ClickOnMenu("Ejecutador");
+		Thread.sleep(1000);
 		
-		tools.ClickOnAmbiente("Test");
+		tools.ClickOnAmbiente("TEST");
+		Thread.sleep(1000);
 		
-		tools.ClickOnAmbiente("BUI Sync");
+		tools.ClickOnAplicacion("BUI Sync");
+		Thread.sleep(1000);
+		
+		tools.ClickOnExecute();
+		Thread.sleep(1000);
+//		
+//		tools.ClickOnAmbiente("TEST");
+//		Thread.sleep(1000);
+//		
+//		tools.ClickOnAplicacion("Procesamiento Diario PE");
+//		Thread.sleep(1000);
+//		
+//		tools.IngresarParametros("-g -e");
+//		Thread.sleep(1000);
+//		
+//		tools.ClickOnExecute();
+//		Thread.sleep(1000);
+		
 		
 		//queryClass = new DataBaseQuery();
 		

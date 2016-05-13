@@ -3,6 +3,7 @@ package PageObjects;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.How;
 import org.openqa.selenium.support.PageFactory;
 
 public class LoginTools {
@@ -19,15 +20,20 @@ public class LoginTools {
 	@FindBy(id=txtPwdId)
 	public WebElement txtPwd;
 	
-	@FindBy(css = ".button.ui-button.ui-widget.ui-state-default.ui-corner-all.ui-state-hover")
+	@FindBy(how = How.CSS , using = ".button.ui-button.ui-widget.ui-state-default.ui-corner-all")
 	public WebElement btnIngresar;	
 	
 	public void LoginUser(String user,String pwd) throws InterruptedException{
+		
 		txtUser.sendKeys(user);
 		Thread.sleep(1000);
+		
 		txtPwd.sendKeys(pwd);
-		Thread.sleep(1000);		
+		Thread.sleep(1000);
+		
 		btnIngresar.click();
+
 	}
+
 
 }

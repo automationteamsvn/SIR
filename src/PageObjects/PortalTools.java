@@ -60,7 +60,7 @@ public class PortalTools {
 		}
 	}
 	
-	public void ClickOnPlicacion(String aplicacion) throws InterruptedException{
+	public void ClickOnAplicacion(String aplicacion) throws InterruptedException{
 		btnAplicaciones.click();
 		Thread.sleep(1000);	
 		WebElement list = this.cboAplicaciones;
@@ -77,7 +77,7 @@ public class PortalTools {
 		btnEjecutar.click();
 	}
 	
-	public void IngresarDescripcion(String parametro){
+	public void IngresarParametros(String parametro){
 		txtParametros.sendKeys(parametro);
 	}
 	
