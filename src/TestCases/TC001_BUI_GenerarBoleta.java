@@ -92,10 +92,10 @@ public class TC001_BUI_GenerarBoleta {
 		if (browser.toLowerCase().contentEquals("firefox")){
 			driver = new FirefoxDriver();	
 		}else if (browser.toLowerCase().contentEquals("chrome")){
-			System.setProperty("webdriver.chrome.driver", "C:\\Users\\mflores\\Desktop\\Work\\CFO\\Selenium\\drivers\\chromedriver.exe");
+			System.setProperty("webdriver.chrome.driver", "C:\\Automation\\Selenium\\drivers\\chromedriver.exe");
 			driver = new ChromeDriver();
 		}else{
-			System.setProperty("webdriver.ie.driver", "C:\\Users\\mflores\\Desktop\\Work\\CFO\\Selenium\\drivers\\IEDriverServer.exe");
+			System.setProperty("webdriver.ie.driver", "C:\\Automation\\Selenium\\drivers\\IEDriverServer.exe");
 			DesiredCapabilities caps = DesiredCapabilities.internetExplorer();
 			caps.setCapability("ignoreZoomSetting", true);
 			driver = new InternetExplorerDriver(caps);
