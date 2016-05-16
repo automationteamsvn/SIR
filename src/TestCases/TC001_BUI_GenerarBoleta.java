@@ -14,6 +14,7 @@ import org.testng.annotations.AfterTest;
 import org.testng.annotations.Test;
 
 import PageObjects.BUIHomePage;
+import PageObjects.GUIDConverter;
 import PageObjects.LoginBUI;
 import PageObjects.LoginTools;
 import PageObjects.PortalDeTramitesHomePage;
@@ -49,6 +50,7 @@ public class TC001_BUI_GenerarBoleta {
 	private String email;
 	private DataBaseQuery queryClass;
 	private String dependencia;
+	private String token;
 	private String titularVisa;
 	private String tarjetaVisa;
 	private String vencVisa;
@@ -60,6 +62,7 @@ public class TC001_BUI_GenerarBoleta {
 	private String urlSIRTools;
 	private String userTools;
 	private String pwdTools;
+	private String urlGUIDConvert;
 	
 	@Test
 	public void ReadConfigFile() throws Exception{
@@ -84,6 +87,7 @@ public class TC001_BUI_GenerarBoleta {
 		urlSIRTools = data.getUrlSIRTools();
 		userTools = data.getUserTools();
 		pwdTools = data.getPwdTools();
+		urlGUIDConvert = data.getUrlGUIDConvert();
 	}	
 
 	@Test (dependsOnMethods={"ReadConfigFile"})
@@ -328,7 +332,7 @@ public class TC001_BUI_GenerarBoleta {
 		
 		Assert.assertTrue(usefulM.CheckpointById(true,PortalDeTramitesHomePage.radMedioPagoId, 60),"No se muestra el Medio de Pago.");
 		
-		String token = usefulM.GetToken();
+		token = usefulM.GetToken();
 		
 		driver.navigate().to(urlPagoBUIToken+token);
 		Thread.sleep(1000);
@@ -390,6 +394,24 @@ public class TC001_BUI_GenerarBoleta {
 	}	
 	
 	@Test (dependsOnMethods={"PagarBoleta"})	
+	public void ObtenerRawCode() throws InterruptedException{
+		
+		driver.navigate().to(urlGUIDConvert);
+		Thread.sleep(1000);
+		
+		Assert.assertTrue(usefulM.CheckpointByCSS(true,GUIDConverter.titleCSS,"GUID Converter",15),"No se muestra la pagina GUID Converter.");
+
+		GUIDConverter guidC = new GUIDConverter(driver);
+		
+		guidC.IngresarToken(token);
+		
+		guidC.ClickOnConvert();
+		
+		guidC.GetRawCode();
+	
+	}
+		
+	@Test (dependsOnMethods={"ObtenerRawCode"})	
 	public void VerificarPagoEnBase() throws Exception{
 		
 		queryClass = new DataBaseQuery();

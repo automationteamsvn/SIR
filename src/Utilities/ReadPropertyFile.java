@@ -109,4 +109,8 @@ public class ReadPropertyFile {
 		return prop.getProperty("pwdTools");
 	}
 	
+	public String getUrlGUIDConvert(){
+		return prop.getProperty("urlGUIDConverter");
+	}
+	
 }
