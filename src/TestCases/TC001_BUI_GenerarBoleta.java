@@ -63,6 +63,7 @@ public class TC001_BUI_GenerarBoleta {
 	private String userTools;
 	private String pwdTools;
 	private String urlGUIDConvert;
+	private String rawCode;
 	
 	@Test
 	public void ReadConfigFile() throws Exception{
@@ -404,10 +405,16 @@ public class TC001_BUI_GenerarBoleta {
 		GUIDConverter guidC = new GUIDConverter(driver);
 		
 		guidC.IngresarToken(token);
+		Thread.sleep(1000);
 		
 		guidC.ClickOnConvert();
+		Thread.sleep(1000);
 		
-		guidC.GetRawCode();
+		Assert.assertTrue(usefulM.CheckpointByCSS(true,GUIDConverter.rowTextCSS,"RAW(16)",15),"No se muestra los resultados de la conversion a RAW(16).");
+		
+		rawCode = guidC.GetRawCode();
+		
+		Assert.assertTrue(rawCode.length()==32,"El RAW Code no tiene la longitud requerida (32).");
 	
 	}
 		
@@ -416,9 +423,15 @@ public class TC001_BUI_GenerarBoleta {
 		
 		queryClass = new DataBaseQuery();
 		
+		//Assert.assertTrue(queryClass.Count("bu.boleta where estado = 1 and numero = '"+ boletaId +"'")==1,"No se genero la boleta con estado 1 en la Base de Datos. (bu.boleta)");
+		
 		Assert.assertTrue(queryClass.Count("PAGOELECTRONICO.COBRO where OBSERVACION like '"+ boletaId +"'")!=0,"No se genero el registro de pago en la Base de Datos. (PAGOELECTRONICO.COBRO)");
 		
-		//String pagoID = queryClass.Select("PAGOELECTRONICO.COBRO where OBSERVACION like '"+ boletaId +"'","ID");
+		String idLote = queryClass.Select("pagoelectronico.cobro co left join pagoelectronico.postback pb on (co.id = pb.idcobro) where co.id = '" + rawCode + "'", "co.IDLOTE");
+		
+		Assert.assertTrue(idLote == null,"No devuelve nulo el IdLote en la base.");
+		
+		Assert.assertTrue(queryClass.Count("cobranza.cobro co left join cobranza.cobroconcepto cc on co.id = cc.idcobro where  co.id = '" + rawCode + "'")==0,"No deberia existirn registros en cobranza.cobro");
 	
 	}
 	
@@ -440,7 +453,38 @@ public class TC001_BUI_GenerarBoleta {
 		
 		tools.ClickOnMenu("Ejecutador");
 		Thread.sleep(1000);
+			
+		tools.ClickOnAmbiente("TEST");
+		Thread.sleep(1000);
 		
+		tools.ClickOnAplicacion("Procesamiento Diario PE");
+		Thread.sleep(1000);
+		
+		tools.IngresarParametros("-g -e");
+		Thread.sleep(1000);
+		
+		tools.ClickOnExecute();
+		Thread.sleep(10000);
+		
+		//Assert.assertTrue(usefulM.CheckpointByCSS(true,PortalTools.txtSalidaConsolaCSS,"Procesamiento de lotes",10),"No se muesra la salida de la ejecucion de PE.");	
+		
+		//Assert.assertTrue(tools.GetSalidaConsola().contains("Procesamiento de lotes SIGEC Pago Electr"),"No se muestra la respuesta de la ejecucion de PE.");
+				
+		queryClass = new DataBaseQuery();
+		
+		String idLote = queryClass.Select("pagoelectronico.cobro co left join pagoelectronico.postback pb on (co.id = pb.idcobro) where co.id = '" + rawCode + "'", "co.IDLOTE");
+		
+		Assert.assertTrue(idLote != null,"Devuelve nulo el IdLote en la base post ejecucion de PE. Raw Code: "+rawCode);
+		
+		Assert.assertTrue(queryClass.Count("cobranza.cobro co left join cobranza.cobroconcepto cc on co.id = cc.idcobro where  co.id = '" + rawCode + "'")!=0,"No se genero un registro en cobranza.cobro. Raw Code: "+rawCode);
+	
+	}
+	
+	@Test (dependsOnMethods={"CierrePE"})	
+	public void ActualizaBUISync() throws Exception{
+		
+		PortalTools tools = new PortalTools(driver);
+	
 		tools.ClickOnAmbiente("TEST");
 		Thread.sleep(1000);
 		
@@ -448,38 +492,33 @@ public class TC001_BUI_GenerarBoleta {
 		Thread.sleep(1000);
 		
 		tools.ClickOnExecute();
-		Thread.sleep(1000);
-//		
-//		tools.ClickOnAmbiente("TEST");
-//		Thread.sleep(1000);
-//		
-//		tools.ClickOnAplicacion("Procesamiento Diario PE");
-//		Thread.sleep(1000);
-//		
-//		tools.IngresarParametros("-g -e");
-//		Thread.sleep(1000);
-//		
-//		tools.ClickOnExecute();
-//		Thread.sleep(1000);
+		Thread.sleep(1000);	
+
+		Assert.assertTrue(usefulM.CheckpointByCSS(true,PortalTools.txtSalidaConsolaCSS,"Procesamiento de lotes",10),"No se muesra la salida de la ejecucion de PE.");	
 		
+		Assert.assertTrue(tools.GetSalidaConsola().contains("Procesamiento de lotes SIGEC Pago Electr"),"No se muestra la respuesta de la ejecucion de PE.");
+				
+		queryClass = new DataBaseQuery();
 		
-		//queryClass = new DataBaseQuery();
+		Assert.assertTrue(queryClass.Count("bu.boleta where estado = 3 and numero = '"+ boletaId +"'")==1,"No se genero la boleta con estado 1 en la Base de Datos. (bu.boleta)");
 		
-		//Assert.assertTrue(queryClass.Count("PAGOELECTRONICO.COBRO where OBSERVACION like '"+ boletaId +"'")!=0,"No se genero el registro de pago en la Base de Datos. (PAGOELECTRONICO.COBRO)");
-		
-		//String pagoID = queryClass.Select("PAGOELECTRONICO.COBRO where OBSERVACION like '"+ boletaId +"'","ID");
+//		String idLote = queryClass.Select("pagoelectronico.cobro co left join pagoelectronico.postback pb on (co.id = pb.idcobro) where co.id = '" + rawCode + "'", "co.IDLOTE");
+//		
+//		Assert.assertTrue(idLote != null,"Devuelve nulo el IdLote en la base post ejecucion de PE. Raw Code: "+rawCode);
+//		
+//		Assert.assertTrue(queryClass.Count("cobranza.cobro co left join cobranza.cobroconcepto cc on co.id = cc.idcobro where  co.id = '" + rawCode + "'")!=0,"No se genero un registro en cobranza.cobro. Raw Code: "+rawCode);		
 	
 	}
 	
-	@Test (dependsOnMethods={"VerificarPagoEnBase"})
-	public void LogoutBUI(){
-		
-//		buiHomePage.Logout();
+//	@Test (dependsOnMethods={"VerificarPagoEnBase"})
+//	public void LogoutBUI(){
 //		
-//		Assert.assertTrue(usefulM.CheckpointByXpath(false,BUIHomePage.btnLogoutXpath, 3),"Aun sigue mostrando el BUI Home Page.");
-//		
-//		driver.quit();
-	}	
+////		buiHomePage.Logout();
+////		
+////		Assert.assertTrue(usefulM.CheckpointByXpath(false,BUIHomePage.btnLogoutXpath, 3),"Aun sigue mostrando el BUI Home Page.");
+////		
+////		driver.quit();
+//	}	
 	
 	@AfterTest
     public void ReportAndErrors() throws AWTException, IOException {

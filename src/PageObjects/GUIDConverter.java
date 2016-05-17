@@ -2,7 +2,6 @@ package PageObjects;
 
 import java.util.List;
 
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -18,11 +17,11 @@ public class GUIDConverter {
 	@FindBy(how = How.TAG_NAME, using = "input")
 	private List<WebElement> txtBox;
 	
-	@FindBy(how = How.CSS, using = ".even_row>td")
+	public static final String rowTextCSS = ".even_row>td";
+	@FindBy(how = How.CSS, using = rowTextCSS)
 	private List<WebElement> rowText;
 	
 	public static final String titleCSS = ".title";
-			
 	
 	public void IngresarToken (String token) {
 		
@@ -48,17 +47,11 @@ public class GUIDConverter {
 		String raw = "";
 		for(int x=0;x<rowText.size();x++){
 			if(rowText.get(x).getText().contains("RAW(16)")){
-				List<WebElement> values = rowText.get(x).findElements(By.tagName("td"));
-				for(int y=0;y<values.size();y++){
-					if(y==1){
-						raw = values.get(y).getText();																					
-						break;
-					}						
-				}
+				raw = rowText.get(x+1).getText();				
 				break;	
 			}
 		}
 		return raw;
 	}
-	
+
 }

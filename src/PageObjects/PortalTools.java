@@ -36,6 +36,11 @@ public class PortalTools {
 	@FindBy(id="Parametros")
 	public WebElement txtParametros;
 	
+	public static final String txtSalidaConsolaCSS = "#Respuesta";
+	
+	@FindBy(id = "Respuesta")
+	private WebElement txtSalidaConsola;
+	
 	public void ClickOnMenu(String menuText){
 		WebElement list = this.menu;
 		List<WebElement> items = list.findElements(By.tagName("li"));
@@ -80,5 +85,10 @@ public class PortalTools {
 	public void IngresarParametros(String parametro){
 		txtParametros.sendKeys(parametro);
 	}
+	
+	public String GetSalidaConsola() {
+		return txtSalidaConsola.getText();
+	}
+	
 	
 }
