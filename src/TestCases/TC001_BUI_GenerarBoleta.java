@@ -423,8 +423,6 @@ public class TC001_BUI_GenerarBoleta {
 		
 		queryClass = new DataBaseQuery();
 		
-		//Assert.assertTrue(queryClass.Count("bu.boleta where estado = 1 and numero = '"+ boletaId +"'")==1,"No se genero la boleta con estado 1 en la Base de Datos. (bu.boleta)");
-		
 		Assert.assertTrue(queryClass.Count("PAGOELECTRONICO.COBRO where OBSERVACION like '"+ boletaId +"'")!=0,"No se genero el registro de pago en la Base de Datos. (PAGOELECTRONICO.COBRO)");
 		
 		String idLote = queryClass.Select("pagoelectronico.cobro co left join pagoelectronico.postback pb on (co.id = pb.idcobro) where co.id = '" + rawCode + "'", "co.IDLOTE");
@@ -466,9 +464,9 @@ public class TC001_BUI_GenerarBoleta {
 		tools.ClickOnExecute();
 		Thread.sleep(10000);
 		
-		//Assert.assertTrue(usefulM.CheckpointByCSS(true,PortalTools.txtSalidaConsolaCSS,"Procesamiento de lotes",10),"No se muesra la salida de la ejecucion de PE.");	
+		Assert.assertTrue(tools.WaitConsolaResult("Procesamiento",20),"No se muestra la salida de la ejecucion de PE.");	
 		
-		//Assert.assertTrue(tools.GetSalidaConsola().contains("Procesamiento de lotes SIGEC Pago Electr"),"No se muestra la respuesta de la ejecucion de PE.");
+		Assert.assertTrue(tools.GetSalidaConsola().contains("Procesamiento de lotes SIGEC Pago Electr"),"No se muestra la respuesta de la ejecucion de PE.");
 				
 		queryClass = new DataBaseQuery();
 		
@@ -484,6 +482,9 @@ public class TC001_BUI_GenerarBoleta {
 	public void ActualizaBUISync() throws Exception{
 		
 		PortalTools tools = new PortalTools(driver);
+		
+		tools.ClickOnMenu("Ejecutador");
+		Thread.sleep(1000);
 	
 		tools.ClickOnAmbiente("TEST");
 		Thread.sleep(1000);
@@ -493,21 +494,15 @@ public class TC001_BUI_GenerarBoleta {
 		
 		tools.ClickOnExecute();
 		Thread.sleep(1000);	
-
-		Assert.assertTrue(usefulM.CheckpointByCSS(true,PortalTools.txtSalidaConsolaCSS,"Procesamiento de lotes",10),"No se muesra la salida de la ejecucion de PE.");	
 		
-		Assert.assertTrue(tools.GetSalidaConsola().contains("Procesamiento de lotes SIGEC Pago Electr"),"No se muestra la respuesta de la ejecucion de PE.");
+		Assert.assertTrue(tools.WaitConsolaResult("Procesamiento",20),"No se muestra la salida de la ejecucion de BUISync.");
+		
+		Assert.assertTrue(tools.GetSalidaConsola().contains("Procesamiento de lotes SIGEC Pago Electr"),"No se muestra la respuesta de la ejecucion de BUISync.");
 				
 		queryClass = new DataBaseQuery();
 		
 		Assert.assertTrue(queryClass.Count("bu.boleta where estado = 3 and numero = '"+ boletaId +"'")==1,"No se genero la boleta con estado 1 en la Base de Datos. (bu.boleta)");
-		
-//		String idLote = queryClass.Select("pagoelectronico.cobro co left join pagoelectronico.postback pb on (co.id = pb.idcobro) where co.id = '" + rawCode + "'", "co.IDLOTE");
-//		
-//		Assert.assertTrue(idLote != null,"Devuelve nulo el IdLote en la base post ejecucion de PE. Raw Code: "+rawCode);
-//		
-//		Assert.assertTrue(queryClass.Count("cobranza.cobro co left join cobranza.cobroconcepto cc on co.id = cc.idcobro where  co.id = '" + rawCode + "'")!=0,"No se genero un registro en cobranza.cobro. Raw Code: "+rawCode);		
-	
+			
 	}
 	
 //	@Test (dependsOnMethods={"VerificarPagoEnBase"})

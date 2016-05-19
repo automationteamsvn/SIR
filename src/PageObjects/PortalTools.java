@@ -87,8 +87,23 @@ public class PortalTools {
 	}
 	
 	public String GetSalidaConsola() {
-		return txtSalidaConsola.getText();
+		return txtSalidaConsola.getAttribute("value");
 	}
 	
+	public boolean WaitConsolaResult(String textToFind, int timeToWait) throws InterruptedException {
+		
+		boolean exists = false;
+		
+		for(int x=0;x<timeToWait;x++){
+			Thread.sleep(1000);
+			System.out.println(txtSalidaConsola.getAttribute("value"));
+			if(txtSalidaConsola.getAttribute("value").contains(textToFind)){
+				exists = true;			
+				break;									
+			}		
+		}
+		
+		return exists;
+	}	
 	
 }
